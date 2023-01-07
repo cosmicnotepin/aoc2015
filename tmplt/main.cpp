@@ -10,17 +10,17 @@ template <typename T> int sgn(T val) {
 }
 
 
-int run1(string const filename)
+string run1(string const filename)
 {
     ifstream ifs {filename};
     for (string line; getline(ifs, line);) {
     }
-    return 0;
+    return to_string(0);
 }
 
-int run2(string const filename)
+string run2(string const filename)
 {
-    return 0;
+    return to_string(0);
 }
 
 int main(int argc, char** argv)
