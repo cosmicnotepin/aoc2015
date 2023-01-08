@@ -20,11 +20,14 @@ string run1(string const filename)
         int vow_cnt = 0;
         for (auto c : vowels)
             vow_cnt += ranges::count(line, c);
+
         if (vow_cnt < 3)
             continue;
+
         for (auto fb : forb)
             if (!ranges::search(line, fb).empty())
                 goto nope;
+
         if (ranges::adjacent_find(line) != line.end())
             res += 1;
 nope:   ;
