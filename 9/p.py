@@ -1,30 +1,20 @@
 from timeit import default_timer as timer
 from collections import defaultdict
+from itertools import permutations
 
 def  main1(filename):
     dists = defaultdict(dict)
     with open(filename, "r") as f:
         for line in f:
-            fr, _, to, _, d  = line.split()
+            fr, to, d  = line.split()[::2]
             dists[fr][to] = int(d)
             dists[to][fr] = int(d)
 
-    for dest in [*(dists.keys())]:
-        dists["start"][dest] = 0
+    res = 999999999
+    for p in permutations(dists.keys()):
+        res = min(res, sum(dists[f][t] for f,t in zip(p, p[1:])))
 
-    def dfs(pos, visited):
-        mn = 9999999
-        for dest in dists["start"].keys():
-            if dest in visited:
-                continue
-            mn = min(mn, dfs(dest, visited | set([dest])) + dists[pos][dest])
-        if mn == 9999999:
-            return 0
-        return mn
-
-
-    visited = set()
-    return str(dfs("start", visited))
+    return str(res)
 
 
 def  main2(filename):
