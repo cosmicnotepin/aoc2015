@@ -28,7 +28,7 @@ def main1(filename):
     return str(score([], 100))
 
 
-def main2_old(filename):
+def main2(filename):
     pat = re.compile('-?\d+')
     ill = []
     with open(filename, "r") as f:
@@ -53,7 +53,7 @@ def main2_old(filename):
 
     return str(score([], 100))
 
-def main2(filename):
+def main2_new(filename):
     pat = re.compile('-?\d+')
     ill = []
     with open(filename, "r") as f:
