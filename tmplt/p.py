@@ -1,13 +1,13 @@
 from timeit import default_timer as timer
 
-def  main1(filename):
+def main1(filename):
     with open(filename, "r") as f:
         line = f.read()
 
     return ""
 
 
-def  main2(filename):
+def main2(filename):
     with open(filename, "r") as f:
         line = f.read()
 
