@@ -14,7 +14,8 @@ def main1(filename):
     if len(cntnr) == 5:
         eggnog = 25
 
-    return str(sum(map(lambda l: sum(l) == eggnog, powerset(cntnr))))
+    #return str(sum(map(lambda l: sum(l) == eggnog, powerset(cntnr))))
+    return str(sum([1 for ss in powerset(cntnr) if sum(ss) == eggnog]))
 
 def main2(filename):
     with open(filename, "r") as f:
@@ -24,15 +25,17 @@ def main2(filename):
     if len(cntnr) == 5:
         eggnog = 25
 
-    def pred(l):
-        if sum(l) == eggnog:
-            return len(l)
-        else:
-            return len(cntnr) + 1
-        
-    minlen = min(map(pred, powerset(cntnr)))
-    return str(sum( \
-            map(lambda l: sum(l) == eggnog, combinations(cntnr, minlen))))
+    minlen = min(len(l) for l in powerset(cntnr) if sum(l) == eggnog)
+    return str(sum([1 for ss in combinations(cntnr, minlen) if sum(ss) == eggnog]))
+    #def pred(l):
+    #    if sum(l) == eggnog:
+    #        return len(l)
+    #    else:
+    #        return len(cntnr) + 1
+    #    
+    #minlen = min(map(pred, powerset(cntnr)))
+    #return str(sum( \
+    #        map(lambda l: sum(l) == eggnog, combinations(cntnr, minlen))))
 
 
 if __name__ == "__main__":
