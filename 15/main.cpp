@@ -56,10 +56,10 @@ class Combinations_with_replacement {
             Itr& operator++()
             { 
                 int i = inds.size() - 1;
-                for(; i>=-1; --i)
+                for(; i>=0; --i)
                     if (inds[i] != N - 1)
                         break;
-                if (i < 0) {
+                if (i == -1) {
                     done = true;
                     return *this;
                 }
