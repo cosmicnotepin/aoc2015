@@ -64,7 +64,7 @@ void cast(State & s, int spell)
 
 int least_to_win = 99999;
 
-int dfs(State s)
+int dfs(State s, int m_so_far)
 {
     int mn = 99999;
 
@@ -74,7 +74,8 @@ int dfs(State s)
     effect(s);
 
     for (size_t i=0; i<spells.size(); ++i) {
-        if (s.m_m < spells[i].cost || (i>1 && s.rt[i-2] > 0))
+        if (s.m_m < spells[i].cost || (i>1 && s.rt[i-2] > 0) ||
+                m_so_far + spells[i].cost >= least_to_win)
             continue;
         State ls = s;
         cast(ls, i);
@@ -82,13 +83,14 @@ int dfs(State s)
         bool shield = ls.rt[0] > 0;
         effect(ls);
         if (ls.hp_b <= 0) {
+            least_to_win = min(least_to_win, m_so_far + spells[i].cost);
             mn = min(mn, spells[i].cost);
             continue;
         }
         ls.hp_m -= max(1, d_b - (shield ? 7 : 0));
         if (ls.hp_m <= 0)
             continue;
-        mn = min(mn, spells[i].cost + dfs(ls));
+        mn = min(mn, spells[i].cost + dfs(ls, m_so_far + spells[i].cost));
     }
     return mn;
 }
@@ -96,7 +98,7 @@ int dfs(State s)
 string run1(string const filename)
 {
     State start {50, 500, 51, {0,0,0}};
-    return to_string(dfs(start));
+    return to_string(dfs(start, 0));
 }
 
 string run2(string const filename)
