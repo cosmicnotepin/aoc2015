@@ -3,6 +3,7 @@ from itertools import combinations, chain
 from functools import reduce
 import sys
 from operator import mul
+from math import sqrt
 
 def prime_factors(n):
     i = 2
@@ -32,6 +33,16 @@ def presents_lazy(house):
         res +=  real_elf * 11
     return res
 
+def divisors(n):
+    small_d = [d for d in range(1, int(sqrt(n)) + 1) if n % d == 0]
+    big_d = [int(n/d) for d in small_d if n != d*d]
+    return small_d + big_d
+
+def presents_direct(house):
+    dvrs = divisors(house)
+    pres = sum(d*10 for d in dvrs)
+    return pres
+
 def presents(house):
     pfs = prime_factors(house)
     res = 10 
@@ -42,7 +53,7 @@ def presents(house):
 def main1(filename):
     min_pres = 29000000
     for house in range(1,int(sys.maxsize)):
-        if presents(house) > min_pres:
+        if sum(d*10 for d in divisors(house)) > min_pres:
             return str(house)
     return ""
 
