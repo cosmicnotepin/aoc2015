@@ -111,6 +111,26 @@ int sum(const vector<int> & v)
     return accumulate(v.begin(), v.end(), 0);
 }
 
+bool divide_evenly(vector<int> ps, int divisions, int size)
+{
+    for (size_t nl=1; nl<=ps.size(); ++nl) {
+        for (auto lp : Combinations(ps.begin(), ps.end(), nl)) {
+            if (sum(lp) != size)
+                continue;
+            if (divisions == 2)
+                return true;
+
+            vector<int> rest_ps;
+            for (auto p : ps)
+                if (find(lp.begin(), lp.end(), p) == lp.end())
+                    rest_ps.push_back(p);
+            if (divide_evenly(rest_ps, divisions-1, size))
+                return true;
+        }
+    }
+    return false;
+}
+
 string run1(string const filename)
 {
     vector<int> ps;
@@ -130,42 +150,20 @@ string run1(string const filename)
             long long unsigned int fp_product = product(fp); 
             if (front_w != third || fp_product >= product_bsf)
                 continue;
+
             vector<int> back_ps;
             for (auto p : ps)
                 if (find(fp.begin(), fp.end(), p) == fp.end())
                     back_ps.push_back(p);
-            for (size_t nl=1; nl<=ps.size()-nf; ++nl) {
-                for (auto lp : Combinations(back_ps.begin(), back_ps.end(), nl)) {
-                    if (sum(lp) != third)
-                        continue;
-                    max_front_size = fp.size();
-                    product_bsf = fp_product;
-                    bsf = fp;
-                }
+
+            if (divide_evenly(back_ps, 2, third)) {
+                max_front_size = fp.size();
+                product_bsf = fp_product;
+                bsf = fp;
             }
         }
     }
     return to_string(product_bsf);
-}
-
-bool divide_evenly(vector<int> ps, int divisions, int size)
-{
-    for (size_t nl=1; nl<=ps.size(); ++nl) {
-        for (auto lp : Combinations(ps.begin(), ps.end(), nl)) {
-            if (sum(lp) != size)
-                continue;
-            if (divisions == 2)
-                return true;
-
-            vector<int> rest_ps;
-            for (auto p : ps)
-                if (find(lp.begin(), lp.end(), p) == lp.end())
-                    rest_ps.push_back(p);
-            if (divide_evenly(rest_ps, divisions-1, size))
-                return true;
-        }
-    }
-    return false;
 }
 
 string run2(string const filename)
@@ -192,25 +190,11 @@ string run2(string const filename)
             for (auto p : ps)
                 if (find(fp.begin(), fp.end(), p) == fp.end())
                     back_ps.push_back(p);
-            for (size_t nl=1; nl<=ps.size()-nf; ++nl) {
-                for (auto lp : Combinations(back_ps.begin(), back_ps.end(), nl)) {
-                    if (sum(lp) != fourth)
-                        continue;
 
-                    vector<int> back_back_ps;
-                    for (auto p : back_ps)
-                        if (find(lp.begin(), lp.end(), p) == lp.end())
-                            back_back_ps.push_back(p);
-                    for (size_t nr=1; nr<=ps.size()-nf-nl; ++nr) {
-                        for (auto rp : Combinations(back_back_ps.begin(), back_back_ps.end(), nr)) {
-                            if (sum(rp) != fourth)
-                                continue;
-                            max_front_size = fp.size();
-                            product_bsf = fp_product;
-                            bsf = fp;
-                        }
-                    }
-                }
+            if (divide_evenly(back_ps, 3, fourth)) {
+                max_front_size = fp.size();
+                product_bsf = fp_product;
+                bsf = fp;
             }
         }
     }
